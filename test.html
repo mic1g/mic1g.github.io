@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Styling for the image */
+    #hover-image {
+      width: 200px;
+      height: 200px;
+    }
+    
+    /* Styling for the text block */
+    #text-block {
+      display: none;
+      position: absolute;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+    }
+    
+    /* Styling for the visible line */
+    #line {
+      position: absolute;
+      width: 10px;
+      background-color: #000;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <img id="hover-image" src="assets/img/apple-touch-icon.png">
+    <div id="text-block">
+      <p>This is the text block.</p>
+    </div>
+    <div id="line"></div>
+  </div>
+
+  <script>
+    // Get the necessary elements
+    const image = document.getElementById('hover-image');
+    const textBlock = document.getElementById('text-block');
+    const line = document.getElementById('line');
+
+    // Add event listener for mouseover event
+    image.addEventListener('mouseover', (event) => {
+      // Show the text block
+      textBlock.style.display = 'block';
+
+      // Get the position of the cursor
+      const cursorX = event.clientX;
+      const cursorY = event.clientY;
+
+      // Get the position of the text block
+      const textBlockX = textBlock.offsetLeft;
+      const textBlockY = textBlock.offsetTop;
+
+      // Calculate the farthest edge of the text block
+      const farthestX = textBlockX + textBlock.offsetWidth;
+      const farthestY = textBlockY + textBlock.offsetHeight;
+
+      // Set the position and size of the line
+      line.style.left = cursorX + 'px';
+      line.style.top = cursorY + 'px';
+      line.style.width = Math.max(farthestX - cursorX, farthestY - cursorY) + 'px';
+    });
+
+    // Add event listener for mouseout event
+    image.addEventListener('mouseout', () => {
+      // Hide the text block and line
+      textBlock.style.display = 'none';
+      line.style.width = '0';
+    });
+  </script>
+</body>
+</html>
