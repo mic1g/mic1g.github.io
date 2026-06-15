@@ -58,45 +58,82 @@ export const strengths = [
 
 export const experiences: ExperienceItem[] = [
   {
+    title: "Assistant Analyst Programmer",
+    company: "Occupational Deafness Compensation Board (ODCB)",
+    period: "May 2026 - Present",
+    location: "Hong Kong",
+    summary:
+      "Public-sector IT role supporting AI chatbot integration, UAT, vendor coordination, procurement follow-up, and digital service delivery across public-facing and internal systems.",
+    bullets: [
+      "Supported the integration of an AI chatbot into the organization's public website, with focus on controlled responses, legally compliant scope boundaries, and safe handling of out-of-scope user queries.",
+      "Reviewed and refined chatbot behavior through prompt design, tone control, response testing, and business-scope validation.",
+      "Coordinated with vendors on the implementation of a DeepSeek API-powered chatbot solution, including requirement clarification, service scope review, and delivery follow-up.",
+      "Built an internal AI chatbot proof-of-concept using Gemini API, LiveKit, and Vercel to demonstrate AI-enabled service interaction and real-time web deployment capabilities.",
+      "Participated in UAT for public website, internal portal, and case management system functions, covering test case preparation, test execution, issue reporting, and result tracking.",
+      "Used Excel and vendor portal tools to manage UAT records, report defects, track vendor responses, and consolidate testing feedback.",
+      "Assisted in translating business and operational requirements into implementation-ready items for vendors and technical stakeholders.",
+      "Supported procurement-related coordination, including vendor communication, service requirement review, quotation/service scope discussion, and implementation follow-up.",
+    ],
+  },
+  {
+    title: "Career Transition & Independent Technical Projects",
+    period: "Oct 2025 - Apr 2026",
+    location: "Hong Kong",
+    summary:
+      "Returned to Hong Kong and focused on job search, technical upskilling, and independent software projects related to cloud, automation, trading systems, and personal productivity applications.",
+    bullets: [
+      "Built independent technical projects using AI-assisted development workflows, including a calorie tracking iOS app and a personal budget planning tool.",
+      "Explored algorithmic trading concepts through personal projects involving market data, trading logic, and automation workflows.",
+      "Practiced modern software development workflows, including requirement planning, prompt engineering, debugging, and iterative feature development.",
+      "Strengthened practical knowledge in cloud, data, and application development while preparing for technical roles in Hong Kong.",
+      "Continued professional development through cloud and data analytics certification study.",
+    ],
+  },
+  {
+    title: "Technology Sales Associate / Team Member",
+    company: "Canada Computers & Electronics",
+    period: "Oct 2024 - Oct 2025",
+    location: "Toronto, Canada",
+    summary:
+      "Customer-facing technology sales role during a Canadian working holiday, advising customers on computer hardware, PC components, and practical technology purchasing decisions.",
+    bullets: [
+      "Provided customer consultation on PC components, peripherals, electronics, and system compatibility based on use case, budget, and performance requirements.",
+      "Developed practical knowledge of computer hardware, including CPUs, GPUs, motherboards, RAM, storage, power supplies, cooling, and PC assembly considerations.",
+      "Applied pre-sales communication skills by identifying customer needs, explaining technical trade-offs, and recommending suitable products.",
+      "Supported upselling and cross-selling opportunities by matching customers with relevant upgrades, accessories, warranties, and complementary products.",
+      "Built confidence in English-language customer communication, objection handling, and consultative selling in a fast-paced retail technology environment.",
+      "Strengthened commercial awareness by balancing technical recommendations with pricing, availability, customer priorities, and sales targets.",
+    ],
+  },
+  {
+    title: "Relocation Preparation & Professional Development",
+    period: "Jul 2024 - Oct 2024",
+    location: "Hong Kong / Canada",
+    summary:
+      "Prepared for relocation to Canada under the Hong Kong Stream B open work permit pathway while continuing technical learning and career planning.",
+    bullets: [
+      "Managed relocation preparation, work permit planning, job market research, and transition planning for overseas work experience in Canada.",
+      "Continued self-study in cloud computing, data analytics, and software development to prepare for future technical roles.",
+      "Researched technology, IT support, and customer-facing opportunities to build international work experience and communication capability.",
+    ],
+  },
+  {
     title: "System Engineer",
     company: "Lenovo PCCW Solutions Limited",
-    period: "Jul 2023 - Present",
+    period: "Jul 2023 - Jun 2024",
     location: "Kowloon, Hong Kong",
     summary:
-      "Delivering cloud and infrastructure solutions while coordinating implementation work across projects and on-site teams.",
+      "Supported cloud, infrastructure, and enterprise system delivery for client-facing projects across healthcare, transportation/payment, and cloud POS environments, with exposure to AWS, Azure, data platforms, and Level 2 production support.",
     bullets: [
-      "Delivered AWS and Azure solutions as a solution integrator for production-facing projects.",
-      "Coordinated work across a seven-member cloud and infrastructure team to keep project execution moving.",
-      "Supported large-scale client engagements and on-site delivery for multi-stakeholder environments.",
-      "Balanced technical implementation with project constraints, communication, and operational support.",
-    ],
-  },
-  {
-    title: "Game Development Intern",
-    company: "CUHK CINTEC",
-    period: "Jun 2022 - Oct 2022",
-    location: "Sha Tin, Hong Kong",
-    summary:
-      "Worked on exhibition-ready game experiences and supporting systems for research promotion projects.",
-    bullets: [
-      "Delivered 13 mini-games in Unity within three months for a public-facing exhibition environment.",
-      "Built supporting database workflows for project tracking and data analysis.",
-      "Helped maintain web content and presentation assets around the exhibition experience.",
-      "Prepared game concepts and proposals for clients and account managers under tight timelines.",
-    ],
-  },
-  {
-    title: "SAP Web Development Intern",
-    company: "AVNET",
-    period: "Jun 2021 - Aug 2021",
-    location: "Kowloon, Hong Kong",
-    summary:
-      "Supported business-facing technical work with exposure to web development, data platforms, and Microsoft tooling.",
-    bullets: [
-      "Translated business requirements into implementation-ready development tasks.",
-      "Worked with Azure cloud services, including exposure to Azure Synapse.",
-      "Applied database and SQL fundamentals to day-to-day project work.",
-      "Used Microsoft development tools and C# in a practical delivery setting.",
+      "Supported enterprise cloud and infrastructure implementation work across production-facing client projects, including healthcare, transportation/payment, and cloud POS-related environments.",
+      "Assisted with AWS-related infrastructure components, including S3, virtual machine-based compute, auto scaling, virtual networking, and load balancing concepts.",
+      "Worked with Azure and data platform technologies, including Azure Databricks, Azure Data Lake, Azure Data Factory, and Microsoft Fabric-related environments.",
+      "Provided Level 2 support for incidents, urgent failures, and operational issues, coordinating troubleshooting and escalation across internal teams and vendors.",
+      "Supported infrastructure environments involving VMware, Active Directory, Microsoft 365, networking, and general system administration tasks.",
+      "Coordinated implementation and support activities across a cloud and infrastructure team to keep project execution and incident response moving.",
+      "Worked with on-site teams, internal engineers, vendors, and client stakeholders in multi-party enterprise delivery environments.",
+      "Assisted with deployment, configuration, troubleshooting, documentation, and post-implementation support for client-facing systems.",
+      "Balanced technical execution with issue follow-up, project constraints, operational support, and stakeholder communication.",
     ],
   },
 ];
@@ -111,20 +148,67 @@ export const education = {
 
 export const skillGroups = [
   {
-    title: "Cloud and Infrastructure",
-    items: ["AWS", "Azure", "Systems Integration", "Infrastructure Delivery"],
+    title: "Cloud & Infrastructure",
+    items: [
+      "AWS S3",
+      "EC2/VM Compute",
+      "Auto Scaling",
+      "Load Balancing",
+      "VPC/Virtual Networking",
+      "Azure",
+      "VMware",
+      "Active Directory",
+      "Microsoft 365",
+      "Networking Fundamentals",
+    ],
   },
   {
-    title: "Development",
-    items: ["TypeScript", "React", "HTML/CSS", "C#", "ASP.NET", "Python"],
+    title: "Data & Analytics",
+    items: [
+      "Azure Databricks",
+      "Azure Data Lake",
+      "Azure Data Factory",
+      "Microsoft Fabric",
+      "SQL",
+      "Google Data Analytics",
+      "Google Advanced Data Analytics",
+    ],
   },
   {
-    title: "Data and Automation",
-    items: ["SQL", "Power BI", "Power Automate", "Workflow Design"],
+    title: "AI & Application Development",
+    items: [
+      "DeepSeek API",
+      "Gemini API",
+      "LiveKit",
+      "Vercel",
+      "AI Chatbot Integration",
+      "Prompt Design",
+      "Scope Control",
+      "Response Testing",
+    ],
   },
   {
-    title: "Ways of Working",
-    items: ["Stakeholder Communication", "Project Coordination", "Kanban Planning", "Team Collaboration"],
+    title: "Testing & Delivery",
+    items: [
+      "UAT",
+      "Test Case Preparation",
+      "Defect Reporting",
+      "Vendor Portal",
+      "Excel Tracking",
+      "Requirement Clarification",
+      "Procurement Coordination",
+    ],
+  },
+  {
+    title: "Business & Communication",
+    items: [
+      "Vendor Coordination",
+      "Stakeholder Communication",
+      "Public-Sector IT Support",
+      "Technical Documentation",
+      "Pre-sales Communication",
+      "Customer Consultation",
+    ],
   },
 ];
 
@@ -225,28 +309,43 @@ export const projects: Project[] = [
 
 export const certifications: Certification[] = [
   {
-    name: "AWS Certification",
-    issuer: "Amazon Web Services",
-    link: "https://www.credly.com/badges/043cb456-8a90-4a71-a8b8-98373e4b1b85/linked_in_profile",
-    image: "/assets/img/certificate-pic/awsLogo.png",
+    name: "Microsoft Certified: Azure Administrator Associate (AZ-104)",
+    issuer: "Microsoft",
+    status: "Completed / Current",
+    image: "/assets/img/certificate-pic/azureLogo.png",
   },
   {
-    name: "Azure Certification",
+    name: "Microsoft Certified: Azure Solutions Architect Expert (AZ-305)",
     issuer: "Microsoft",
+    status: "Completed / Current",
     link: "https://learn.microsoft.com/zh-tw/users/ChakSumFung-5694/credentials/4CCB20F69C558DC",
     image: "/assets/img/certificate-pic/azureLogo.png",
   },
   {
-    name: "Google Data Analytics",
+    name: "AWS Certified Solutions Architect - Associate",
+    issuer: "Amazon Web Services",
+    status: "Completed / Current",
+    link: "https://www.credly.com/badges/043cb456-8a90-4a71-a8b8-98373e4b1b85/linked_in_profile",
+    image: "/assets/img/certificate-pic/awsLogo.png",
+  },
+  {
+    name: "Google Data Analytics Professional Certificate",
     issuer: "Google / Coursera",
+    status: "Completed / Current",
     link: "https://www.credly.com/badges/bd1204b0-6d25-4ead-a621-55af5cef4c5e/linked_in_profile",
     image: "/assets/img/certificate-pic/courseraLogo.png",
   },
   {
-    name: "Alibaba Cloud Certification",
-    issuer: "Alibaba Cloud",
-    link: "https://edu.alibabacloud.com/certification/acp_cloudcomputing",
-    image: "/assets/img/certificate-pic/alibabaCloudLogo.png",
+    name: "Google Advanced Data Analytics Professional Certificate",
+    issuer: "Google / Coursera",
+    status: "Completed / Current",
+    image: "/assets/img/certificate-pic/dataAnalyticsLogo.png",
+  },
+  {
+    name: "AWS Certified Solutions Architect - Professional",
+    issuer: "Amazon Web Services",
+    status: "Planned",
+    image: "/assets/img/certificate-pic/awsLogo.png",
   },
 ];
 

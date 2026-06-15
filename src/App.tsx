@@ -23,13 +23,14 @@ import {
   strengths,
   testimonials,
 } from "./data/site";
+import FourRulePage from "./FourRulePage";
 import type { ContactLink, Project } from "./types/site";
 
 const navigation = [
   { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
   { label: "Credentials", href: "#credentials" },
+  { label: "Experience", href: "#experience" },
+  { label: "Project", href: "#projects" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -49,6 +50,16 @@ function iconForContact(icon: ContactLink["icon"]) {
 function App() {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [pathname, setPathname] = useState(() => {
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+
+    if (redirect?.startsWith("/")) {
+      window.history.replaceState(null, "", redirect);
+      return redirect.split("?")[0].split("#")[0];
+    }
+
+    return window.location.pathname;
+  });
 
   useEffect(() => {
     if (!activeProject) {
@@ -70,6 +81,17 @@ function App() {
       window.removeEventListener("keydown", handleEscape);
     };
   }, [activeProject]);
+
+  useEffect(() => {
+    const handlePopState = () => setPathname(window.location.pathname);
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  if (pathname === "/4rule" || pathname === "/4rule/") {
+    return <FourRulePage />;
+  }
 
   return (
     <div className="min-h-screen bg-sand text-ink">
@@ -214,6 +236,82 @@ function App() {
           </div>
         </section>
 
+        <section id="credentials" className="mx-auto max-w-6xl px-5 py-20 sm:px-6 lg:px-8">
+          <div className="grid gap-16 lg:grid-cols-[1fr_0.95fr]">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-brand">
+                Credentials
+              </p>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-ink">
+                Certifications and social proof that support the technical story.
+              </h2>
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                {certifications.map((certification) => {
+                  const content = (
+                    <>
+                      <div className="flex h-16 items-center justify-between gap-4">
+                        <img
+                          src={certification.image}
+                          alt={certification.name}
+                          className="max-h-12 max-w-[7rem] object-contain"
+                        />
+                        {certification.link ? (
+                          <ExternalLink size={18} className="text-slate transition group-hover:text-brand" />
+                        ) : null}
+                      </div>
+                      <p className="mt-5 font-display text-lg font-semibold text-ink">
+                        {certification.name}
+                      </p>
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <p className="text-sm text-slate">{certification.issuer}</p>
+                        <span className="rounded-full border border-brand/15 bg-brand/5 px-3 py-1 text-xs font-semibold text-brand">
+                          {certification.status}
+                        </span>
+                      </div>
+                    </>
+                  );
+
+                  return certification.link ? (
+                    <a
+                      key={certification.name}
+                      href={certification.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group rounded-3xl border border-ink/8 bg-white p-5 shadow-panel transition hover:-translate-y-1"
+                    >
+                      {content}
+                    </a>
+                  ) : (
+                    <article
+                      key={certification.name}
+                      className="rounded-3xl border border-ink/8 bg-white p-5 shadow-panel"
+                    >
+                      {content}
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-brand">
+                What people notice
+              </p>
+              <div className="mt-8 space-y-4">
+                {testimonials.map((testimonial) => (
+                  <article key={testimonial.name} className="rounded-3xl bg-mist p-6">
+                    <p className="text-base leading-7 text-slate">"{testimonial.quote}"</p>
+                    <div className="mt-5">
+                      <p className="font-display text-lg font-semibold text-ink">{testimonial.name}</p>
+                      <p className="text-sm text-slate">{testimonial.title}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section id="experience" className="bg-white py-20">
           <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8">
             <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr]">
@@ -240,13 +338,15 @@ function App() {
               <div className="space-y-6">
                 {experiences.map((experience) => (
                   <article
-                    key={`${experience.company}-${experience.period}`}
+                    key={`${experience.title}-${experience.period}`}
                     className="rounded-[2rem] border border-ink/8 bg-sand p-7 shadow-panel"
                   >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div>
                         <p className="font-display text-2xl font-semibold text-ink">{experience.title}</p>
-                        <p className="mt-1 text-sm font-medium text-brand">{experience.company}</p>
+                        {experience.company ? (
+                          <p className="mt-1 text-sm font-medium text-brand">{experience.company}</p>
+                        ) : null}
                       </div>
                       <div className="text-sm text-slate sm:text-right">
                         <p>{experience.period}</p>
@@ -348,60 +448,6 @@ function App() {
                   </div>
                 </article>
               ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="credentials" className="mx-auto max-w-6xl px-5 py-20 sm:px-6 lg:px-8">
-          <div className="grid gap-16 lg:grid-cols-[1fr_0.95fr]">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-brand">
-                Credentials
-              </p>
-              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-ink">
-                Certifications and social proof that support the technical story.
-              </h2>
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                {certifications.map((certification) => (
-                  <a
-                    key={certification.name}
-                    href={certification.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group rounded-3xl border border-ink/8 bg-white p-5 shadow-panel transition hover:-translate-y-1"
-                  >
-                    <div className="flex h-16 items-center justify-between gap-4">
-                      <img
-                        src={certification.image}
-                        alt={certification.name}
-                        className="max-h-12 max-w-[7rem] object-contain"
-                      />
-                      <ExternalLink size={18} className="text-slate transition group-hover:text-brand" />
-                    </div>
-                    <p className="mt-5 font-display text-lg font-semibold text-ink">
-                      {certification.name}
-                    </p>
-                    <p className="mt-1 text-sm text-slate">{certification.issuer}</p>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-brand">
-                What people notice
-              </p>
-              <div className="mt-8 space-y-4">
-                {testimonials.map((testimonial) => (
-                  <article key={testimonial.name} className="rounded-3xl bg-mist p-6">
-                    <p className="text-base leading-7 text-slate">"{testimonial.quote}"</p>
-                    <div className="mt-5">
-                      <p className="font-display text-lg font-semibold text-ink">{testimonial.name}</p>
-                      <p className="text-sm text-slate">{testimonial.title}</p>
-                    </div>
-                  </article>
-                ))}
-              </div>
             </div>
           </div>
         </section>

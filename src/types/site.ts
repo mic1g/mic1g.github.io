@@ -22,7 +22,7 @@ export type Profile = {
 
 export type ExperienceItem = {
   title: string;
-  company: string;
+  company?: string;
   period: string;
   location: string;
   summary: string;
@@ -49,7 +49,8 @@ export type Project = {
 export type Certification = {
   name: string;
   issuer: string;
-  link: string;
+  status: "Completed / Current" | "Planned";
+  link?: string;
   image: string;
 };
 
