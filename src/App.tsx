@@ -23,6 +23,7 @@ import {
   strengths,
   testimonials,
 } from "./data/site";
+import Dp700Page from "./dp700/Dp700Page";
 import FourRulePage from "./FourRulePage";
 import type { ContactLink, Project } from "./types/site";
 
@@ -91,6 +92,10 @@ function App() {
 
   if (pathname === "/4rule" || pathname === "/4rule/") {
     return <FourRulePage />;
+  }
+
+  if (pathname === "/dp700" || pathname === "/dp700/") {
+    return <Dp700Page />;
   }
 
   return (
