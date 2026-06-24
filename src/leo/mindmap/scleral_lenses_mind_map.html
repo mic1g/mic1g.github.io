@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contemporary Scleral Lenses - Interactive Mind Map</title>
+  <style>
+    :root {
+      --ink: #1f2a2e;
+      --muted: #637177;
+      --paper: #fbfaf7;
+      --panel: #ffffff;
+      --line: #d9ddd7;
+      --teal: #0f766e;
+      --blue: #315f9d;
+      --red: #b4453e;
+      --gold: #9a6a19;
+      --green: #4b7d3a;
+      --shadow: 0 18px 50px rgba(31, 42, 46, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(15, 118, 110, 0.08), transparent 320px),
+        var(--paper);
+    }
+
+    header {
+      padding: 24px clamp(18px, 4vw, 48px) 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 250, 247, 0.88);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 38px);
+      line-height: 1.06;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 980px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      align-items: center;
+    }
+
+    button, input {
+      font: inherit;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      border-radius: 7px;
+      min-height: 38px;
+    }
+
+    button {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    button:hover { border-color: var(--teal); color: var(--teal); }
+
+    input {
+      width: min(360px, 100%);
+      padding: 8px 12px;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(290px, 0.9fr) minmax(420px, 1.55fr) minmax(300px, 0.95fr);
+      gap: 18px;
+      padding: 18px clamp(14px, 3vw, 34px) 28px;
+      min-height: calc(100vh - 136px);
+    }
+
+    section {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .reader {
+      padding: 18px;
+      overflow: auto;
+      max-height: calc(100vh - 170px);
+    }
+
+    .reader h2, .detail h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .reader h3 {
+      margin: 18px 0 8px;
+      font-size: 15px;
+      color: var(--teal);
+    }
+
+    .reader p, .reader li, .detail li, .detail p {
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .reader ul, .detail ul {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+
+    .map-wrap {
+      position: relative;
+      min-height: 640px;
+      overflow: hidden;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      min-height: 640px;
+      display: block;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(15, 118, 110, 0.06), transparent 30%),
+        radial-gradient(circle at 85% 85%, rgba(154, 106, 25, 0.06), transparent 32%),
+        #fffefd;
+    }
+
+    .link {
+      fill: none;
+      stroke: #c7d2cc;
+      stroke-width: 2;
+    }
+
+    .node circle {
+      stroke: #fff;
+      stroke-width: 2.5;
+      filter: drop-shadow(0 4px 8px rgba(31, 42, 46, 0.15));
+    }
+
+    .node text {
+      font-size: 12px;
+      fill: var(--ink);
+      paint-order: stroke;
+      stroke: #fff;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+      cursor: default;
+    }
+
+    .node.selected circle { stroke: #1f2a2e; stroke-width: 3.5; }
+    .node.match text { fill: var(--red); font-weight: 700; }
+
+    .hint {
+      position: absolute;
+      left: 14px;
+      bottom: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.86);
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 8px 10px;
+    }
+
+    .detail {
+      padding: 18px;
+      overflow: auto;
+      max-height: calc(100vh - 170px);
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0 14px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 8px;
+      color: var(--muted);
+      font-size: 12px;
+      background: #fcfcfb;
+    }
+
+    .note {
+      padding: 12px;
+      background: #f6f3eb;
+      border-left: 4px solid var(--gold);
+      border-radius: 6px;
+      color: #5d4a24;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1120px) {
+      main { grid-template-columns: 1fr; }
+      .reader, .detail { max-height: none; }
+      .map-wrap { min-height: 620px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Contemporary Scleral Lenses</h1>
+    <div class="subtitle">
+      Interactive reading map for <em>Ophthalmology: Current and Future Developments, Volume 4 - Contemporary Scleral Lenses: Theory and Application</em>, edited by Melissa Barnett and Lynette K. Johns.
+    </div>
+    <div class="toolbar">
+      <button id="expandBtn" type="button">Expand all</button>
+      <button id="collapseBtn" type="button">Collapse to chapters</button>
+      <button id="resetBtn" type="button">Reset view</button>
+      <input id="searchBox" type="search" placeholder="Search topics, e.g. fogging, OCT, keratoconus">
+    </div>
+  </header>
+
+  <main>
+    <section class="reader" aria-label="Summary">
+      <h2>Fast Summary</h2>
+      <p>This volume is a practical guide to scleral lenses: why they returned to clinical use, how their anatomy and optics work, who benefits, how to fit and evaluate them, how to document care, and how to manage complications and special cases.</p>
+
+      <h3>Core Thesis</h3>
+      <p>Scleral lenses succeed because they vault the cornea, land on the conjunctival/scleral surface, and create a fluid reservoir that can both rehabilitate optics and protect compromised ocular surfaces. Their power comes with clinical responsibility: oxygen delivery, reservoir thickness, landing-zone alignment, handling, hygiene, and follow-up all matter.</p>
+
+      <h3>Most Important Points</h3>
+      <ul>
+        <li><strong>History:</strong> scleral lenses began as glass shells for protection and optics, declined with smaller corneal lenses, then re-emerged because modern GP materials, imaging, and manufacturing solved earlier problems.</li>
+        <li><strong>Terminology:</strong> lens size should be described by bearing pattern: corneal, corneo-scleral, or scleral. Scleral designs include optic, mid-peripheral/intermediate, and landing zones.</li>
+        <li><strong>Shape drives fit:</strong> corneal curvature alone is not enough. Ocular sagittal height, limbal contour, nasal flattening, toricity, and quadrant asymmetry determine vault and landing.</li>
+        <li><strong>Optics:</strong> the post-lens tear reservoir masks irregularity, but decentration, tilt, reservoir depth, front-surface optics, and higher-order aberrations affect final vision.</li>
+        <li><strong>Indications:</strong> major uses include irregular corneas, ectasia, post-surgical corneas, grafts, ocular surface disease, exposure, neurotrophic disease, persistent epithelial defects, trauma, and some regular-cornea refractive needs.</li>
+        <li><strong>Ideal fit:</strong> clear the cornea and limbus without excessive reservoir thickness; align the landing zone to avoid compression, impingement, blanching, edge lift, or suction.</li>
+        <li><strong>Evaluation:</strong> inspect for bubbles and wetting first, then measure apical and limbal clearance, judge landing-zone patterns, assess movement/decentration, and re-check after settling.</li>
+        <li><strong>Complications:</strong> watch for edema, bullae, neovascularization, limbal bearing, staining, hyperemia, conjunctival impression, hypertrophy, prolapse, midday fogging, poor wetting, poor vision, and handling injury.</li>
+        <li><strong>Handling:</strong> patient success depends on clean hands, correct filling solution, bubble-free application, safe removal, disinfection, case hygiene, and repeated education.</li>
+        <li><strong>Practice systems:</strong> good outcomes depend on documentation, imaging, staff training, referral communication, realistic expectations, and collaborative care with ophthalmology.</li>
+      </ul>
+
+      <h3>Clinical Mental Model</h3>
+      <p>Think in five layers: patient indication, ocular shape, lens geometry, physiologic response, and real-world handling. A lens that looks optically impressive but causes compression, hypoxia, fogging, or handling failure is not a successful lens.</p>
+
+      <div class="note">This is a study aid and does not replace the original text or clinical judgment. The map paraphrases the book’s themes and chapter structure.</div>
+    </section>
+
+    <section class="map-wrap" aria-label="Interactive mind map">
+      <svg id="mindmap" role="img" aria-label="Mind map of scleral lens concepts"></svg>
+      <div class="hint">Click nodes to expand/collapse. Click a label to show key points.</div>
+    </section>
+
+    <section class="detail" aria-live="polite" aria-label="Selected topic details">
+      <div class="eyebrow">Selected Topic</div>
+      <h2 id="detailTitle">Contemporary Scleral Lenses</h2>
+      <div class="tag-row" id="tagRow"></div>
+      <p id="detailSummary">Select any node in the map to see chapter-level takeaways and practical implications.</p>
+      <ul id="detailPoints"></ul>
+    </section>
+  </main>
+
+  <script>
+    const rootData = {
+      name: "Scleral lenses",
+      color: "teal",
+      tags: ["book thesis", "clinical workflow"],
+      summary: "A scleral lens is a large-diameter GP device that vaults the cornea and lands on the conjunctival/scleral surface, creating a tear reservoir for optical rehabilitation and surface protection.",
+      points: [
+        "The lens is not just a refractive device; it is also a therapeutic surface and fluid reservoir.",
+        "Success depends on matching ocular shape, lens design, physiology, patient handling, and follow-up systems.",
+        "Modern imaging and manufacturing make scleral lenses more predictable than the historical glass and PMMA eras."
+      ],
+      children: [
+        {
+          name: "Foundations",
+          color: "blue",
+          summary: "Chapters 1-4 establish history, terminology, surface shape, and optics.",
+          points: [
+            "The field moved from glass shells and impression techniques to oxygen-permeable GP materials and reproducible designs.",
+            "Clear terminology prevents confusion across manufacturers and designs.",
+            "Anterior ocular surface shape, not only corneal curvature, drives scleral lens fit.",
+            "Scleral optics depend on the tear reservoir, lens centration, lens tilt, and possible wavefront-guided correction."
+          ],
+          children: [
+            {
+              name: "1. History",
+              color: "blue",
+              tags: ["Da Vinci", "glass shells", "GP revival"],
+              summary: "Scleral lenses are older than other contact lens modalities and repeatedly evolved as materials and measurement improved.",
+              points: [
+                "Early concepts date back centuries; late-1800s glass shells were used for protection and optical correction.",
+                "Keratoconus and ocular surface disease were early drivers of adoption.",
+                "Discomfort, hypoxia, poor reproducibility, and handling problems limited older designs.",
+                "Modern GP materials, higher oxygen permeability, better lathes, imaging, and fitting philosophies enabled the resurgence."
+              ]
+            },
+            {
+              name: "2. Anatomy",
+              color: "blue",
+              tags: ["optic zone", "landing zone", "terminology"],
+              summary: "The chapter standardizes language for lens parts and large-diameter GP categories.",
+              points: [
+                "Large GP lenses are best classified by bearing pattern: corneal, corneo-scleral, or scleral.",
+                "The optic zone supplies refractive correction and must work with the tear reservoir.",
+                "The mid-peripheral or intermediate zone manages corneal and limbal vault.",
+                "The landing zone distributes bearing on conjunctival/scleral tissue; toric, quadrant-specific, channels, notches, and microvaults solve localized obstacles."
+              ]
+            },
+            {
+              name: "3. Ocular shape",
+              color: "blue",
+              tags: ["sagittal height", "topography", "scleral asymmetry"],
+              summary: "Scleral lens fitting requires understanding the cornea, limbus, conjunctiva, and sclera as one anterior surface.",
+              points: [
+                "Keratometry and corneal topography help, but they do not describe the landing surface.",
+                "Ocular sagittal height, corneo-scleral junction shape, nasal flattening, scleral toricity, and asymmetry are key fitting variables.",
+                "OCT, Scheimpflug, profilometry, and scleral topography add information beyond Placido corneal maps.",
+                "Shape knowledge helps prevent blanching, compression, conjunctival prolapse, decentration, and unstable optics."
+              ]
+            },
+            {
+              name: "4. Optics",
+              color: "blue",
+              tags: ["tear lens", "decentration", "HOA"],
+              summary: "Scleral lenses can create excellent optics, but reservoir thickness, decentration, and tilt complicate power prediction.",
+              points: [
+                "The post-lens tear reservoir neutralizes much of the anterior corneal irregularity.",
+                "Diagnostic lens evaluation and over-refraction often remain necessary.",
+                "Front-surface toric, multifocal, prism, and customized optics may be needed.",
+                "Higher-order aberration correction becomes more feasible when centration and rotational stability are controlled."
+              ]
+            }
+          ]
+        },
+        {
+          name: "Patient selection",
+          color: "green",
+          summary: "Chapters 5-6 explain when scleral lenses are medically or refractively useful.",
+          points: [
+            "Classic indications are irregular cornea and ocular surface disease.",
+            "The book also considers use in regular corneas, especially where comfort, environment, presbyopia, or specialty optics matter.",
+            "Selection requires balancing visual potential, ocular health, handling capacity, cost, follow-up, and alternatives."
+          ],
+          children: [
+            {
+              name: "5. Medical indications",
+              color: "green",
+              tags: ["ectasia", "transplant", "ocular surface"],
+              summary: "Scleral lenses are useful for visual rehabilitation and ocular surface protection across many corneal and surface disorders.",
+              points: [
+                "Irregular cornea indications include keratoconus, pellucid marginal degeneration, keratoglobus, post-refractive ectasia, scarring, trauma, and post-transplant irregularity.",
+                "Surface protection indications include severe dry eye, inflammatory surface disease, autoimmune keratoconjunctivitis sicca, exposure, neurotrophic disease, limbal stem cell deficiency, and persistent epithelial defects.",
+                "The lens can reduce mechanical eyelid trauma and maintain a lubricating reservoir.",
+                "Diseased eyes need closer monitoring because hypoxia, inflammation, infection risk, and epithelial compromise may be amplified."
+              ]
+            },
+            {
+              name: "6. Regular cornea use",
+              color: "green",
+              tags: ["comfort", "presbyopia", "refractive options"],
+              summary: "Scleral lenses may serve selected regular-cornea patients, but the risk-benefit threshold is different from medical necessity.",
+              points: [
+                "Potential benefits include comfort in challenging environments, stable optics, multifocal platforms, and reduced lens awareness.",
+                "Limitations include handling burden, cost, physiologic oxygen concerns, reservoir fogging, and care complexity.",
+                "The chapter compares scleral lenses with soft lenses, corneal GP lenses, hybrids, orthokeratology, and refractive surgery.",
+                "Regular-cornea fitting should be conservative because the patient starts with a healthier baseline and often has good alternatives."
+              ]
+            }
+          ]
+        },
+        {
+          name: "Fitting workflow",
+          color: "gold",
+          summary: "Chapters 7-11 move from measurement tools to initial lens choice, evaluation, documentation, and clinic flow.",
+          points: [
+            "Technology supports but does not replace clinical evaluation.",
+            "The fitting sequence is: assess anatomy and indication, choose initial design, apply and settle, evaluate vault and landing, modify systematically, document, dispense, and follow up.",
+            "A repeatable exam flow reduces missed problems and improves patient education."
+          ],
+          children: [
+            {
+              name: "7. Instrumentation",
+              color: "gold",
+              tags: ["OCT", "profilometry", "tomography"],
+              summary: "Modern instruments measure the cornea, limbus, sclera, tear reservoir, and tissue response.",
+              points: [
+                "Anterior segment OCT helps measure vault, limbal clearance, corneal thickness, and the post-lens reservoir.",
+                "Scleral topography/profilometry can improve landing-zone selection and haptic customization.",
+                "Scheimpflug tomography, Placido topography, specular microscopy, and confocal microscopy answer different physiologic questions.",
+                "Instrumentation is most valuable when tied to a specific decision: vault, landing alignment, hypoxia risk, endothelial status, or disease monitoring."
+              ]
+            },
+            {
+              name: "8. Initial selection",
+              color: "gold",
+              tags: ["diameter", "sagittal depth", "diagnostic set"],
+              summary: "The first diagnostic lens should be chosen from ocular geometry and clinical goals, not guesswork alone.",
+              points: [
+                "Ideal fit begins with sufficient corneal and limbal clearance plus a landing zone that distributes pressure evenly.",
+                "Corneal diameter, sagittal depth, corneal shape, surgery history, and scleral shape all inform lens diameter and depth.",
+                "OCT, tomography, and topography-guided software can shorten the fitting process.",
+                "A disciplined first choice saves chair time and improves patient confidence."
+              ]
+            },
+            {
+              name: "9. Evaluation",
+              color: "gold",
+              tags: ["clearance", "landing", "settling"],
+              summary: "Scleral lens evaluation should be systematic from gross inspection through slit-lamp and follow-up assessment.",
+              points: [
+                "Start outside the slit lamp: check bubbles, surface wetting, gross centration, movement, and obvious landing-zone patterns.",
+                "Use fluorescein and optic section to judge apical and limbal clearance, then measure clearance as the lens settles.",
+                "Landing-zone problems include compression, impingement, edge lift, decentration, blanching, and conjunctival prolapse.",
+                "Follow-up must include the lens, the cornea, conjunctiva/sclera, hyperemia, staining, impression rings, reservoir debris, and optical quality."
+              ]
+            },
+            {
+              name: "10. Documentation",
+              color: "gold",
+              tags: ["history", "imaging", "orders"],
+              summary: "Careful documentation supports diagnosis, reimbursement, lens ordering, monitoring, and communication.",
+              points: [
+                "Record medical and ocular history, previous treatments, lens history, visual function, slit-lamp findings, and systemic disease context.",
+                "Document lens clearance, landing, tear exchange, centration, movement, reservoir debris, ordered parameters, and modifications.",
+                "Photography, topography, Scheimpflug imaging, and OCT make changes visible over time.",
+                "Good notes help insurers, referring doctors, future visits, and clinical decision-making."
+              ]
+            },
+            {
+              name: "11. Exam flow",
+              color: "gold",
+              tags: ["clinic workflow", "education", "follow-up"],
+              summary: "A prepared clinic flow makes complex scleral lens care feel orderly for patient and practitioner.",
+              points: [
+                "Initial visits should cover insurance authorization, case history, acuity, refraction, anterior/posterior segment evaluation, contact lens evaluation, and special testing.",
+                "Initial fitting choices include diameter, shape, diagnostic lens selection, and lens evaluation.",
+                "Dispensing and follow-up visits should reinforce handling, expectations, wearing schedule, and safety signs.",
+                "Patient education is part of the clinical exam, especially for chronic disease and medically necessary lenses."
+              ]
+            }
+          ]
+        },
+        {
+          name: "Risk management",
+          color: "red",
+          summary: "Chapters 12-14 cover complications, patient handling, and special challenges.",
+          points: [
+            "Most complications are understandable through oxygen, pressure, tear reservoir behavior, wetting, and patient handling.",
+            "Problem solving is iterative: identify the symptom, inspect lens and eye, infer mechanism, change one or two variables, then re-evaluate.",
+            "Special anatomy or disease often requires customized haptics, notches, channels, impression-based designs, or collaborative care."
+          ],
+          children: [
+            {
+              name: "12. Complications",
+              color: "red",
+              tags: ["edema", "fogging", "poor vision"],
+              summary: "Scleral lenses are powerful medical devices and can cause physiologic, optical, comfort, and handling problems.",
+              points: [
+                "Corneal edema and bullae raise concern for hypoxia, excessive reservoir thickness, low oxygen transmission, or vulnerable endothelium.",
+                "Neovascularization, limbal bearing, staining, hyperemia, impression rings, hypertrophy, keratinization, and prolapse often point to fit or tissue-response problems.",
+                "Midday fogging may arise from reservoir debris, inflammation, meibomian material, surface wetting issues, or poor tear-reservoir design.",
+                "Poor vision can reflect residual refractive error, flexure, decentration, reservoir debris, wetting, rotation, or higher-order aberrations."
+              ]
+            },
+            {
+              name: "13. Handling",
+              color: "red",
+              tags: ["application", "removal", "hygiene"],
+              summary: "Even a well-designed lens fails if the patient cannot apply, remove, clean, and store it safely.",
+              points: [
+                "Teach handwashing, cleaning, rinsing, disinfection, storage, case cleaning, and safe use of filling solution.",
+                "Application must avoid bubbles because bubbles degrade vision and may compromise the ocular surface.",
+                "Removal technique matters because excessive force can injure conjunctiva or create fear and noncompliance.",
+                "Review care at follow-up visits; assumptions about patient technique are a common source of preventable problems."
+              ]
+            },
+            {
+              name: "14. Challenges",
+              color: "red",
+              tags: ["lumps and bumps", "pediatrics", "HOA"],
+              summary: "Difficult cases include surface elevations, glaucoma surgery anatomy, painful eyes, pediatric patients, transplant eyes, neurotrophic corneas, and advanced optical needs.",
+              points: [
+                "Pinguecula, pterygium, conjunctival nodules, blebs, glaucoma drainage devices, and symblepharon may require notches, channels, microvaults, or custom landing designs.",
+                "Impression-based scleral lenses are useful when standard geometry cannot match complex anatomy.",
+                "Corneal infiltrates, edema, neovascularization, and graft rejection require careful differential diagnosis and medical collaboration.",
+                "Pediatric, Asian-eye, nystagmus, Fuchs dystrophy, neurotrophic, persistent epithelial defect, and diving scenarios require tailored risk assessment."
+              ]
+            }
+          ]
+        },
+        {
+          name: "Practice systems",
+          color: "teal",
+          summary: "Chapters 15-16 shift from lens mechanics to building and coordinating a specialty service.",
+          points: [
+            "A scleral lens practice needs equipment, training, mentorship, laboratory relationships, patient education systems, and referral communication.",
+            "Collaborative care matters because many patients have complex corneal, ocular surface, surgical, oncology, or glaucoma histories.",
+            "The best service model is both technically competent and empathetic."
+          ],
+          children: [
+            {
+              name: "15. Recruitment",
+              color: "teal",
+              tags: ["practice building", "training", "patient loyalty"],
+              summary: "Specialty scleral lens care can grow a practice when investment is paired with skill and patient-centered service.",
+              points: [
+                "Useful investments include slit lamp imaging, topography, OCT, specular microscopy, tomography, meibomography, diagnostic sets, and trained staff.",
+                "Patient groups include dry eye and ocular surface disease, visual rehabilitation, and refractive-error patients.",
+                "Mentorship, continuing education, lab relationships, and networking shorten the learning curve.",
+                "Empathy and realistic expectation-setting are business assets because complex patients often arrive discouraged."
+              ]
+            },
+            {
+              name: "16. Collaborative care",
+              color: "teal",
+              tags: ["referrals", "surgery", "ophthalmology"],
+              summary: "Scleral lens patients often need coordinated care between lens specialists, corneal specialists, surgeons, and referring clinicians.",
+              points: [
+                "Scleral lenses are relevant before or after cataract surgery, corneal transplantation, oncology treatment, and glaucoma procedures.",
+                "They can delay or reduce need for transplantation in some ectasia or irregular astigmatism cases and improve quality of life in severe surface disease.",
+                "Communication should clarify diagnosis, lens goals, fit status, ocular health concerns, and when medical/surgical intervention is needed.",
+                "Referral relationships work best when all providers understand what scleral lenses can and cannot do."
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    const colors = {
+      teal: "#0f766e",
+      blue: "#315f9d",
+      red: "#b4453e",
+      gold: "#9a6a19",
+      green: "#4b7d3a"
+    };
+
+    const svg = document.getElementById("mindmap");
+    const detailTitle = document.getElementById("detailTitle");
+    const detailSummary = document.getElementById("detailSummary");
+    const detailPoints = document.getElementById("detailPoints");
+    const tagRow = document.getElementById("tagRow");
+    const searchBox = document.getElementById("searchBox");
+    let selectedNode = null;
+
+    function assignState(node, depth = 0, parent = null) {
+      node.depth = depth;
+      node.parent = parent;
+      node.id = `${parent ? parent.id + "-" : ""}${node.name.replace(/[^a-z0-9]+/gi, "_")}`;
+      node.expanded = depth < 2;
+      (node.children || []).forEach(child => assignState(child, depth + 1, node));
+    }
+
+    function visibleNodes(root) {
+      const nodes = [];
+      const links = [];
+      function walk(node) {
+        nodes.push(node);
+        if (node.expanded && node.children) {
+          node.children.forEach(child => {
+            links.push([node, child]);
+            walk(child);
+          });
+        }
+      }
+      walk(root);
+      return { nodes, links };
+    }
+
+    function layout(root) {
+      const { nodes, links } = visibleNodes(root);
+      const levels = new Map();
+      nodes.forEach(node => {
+        if (!levels.has(node.depth)) levels.set(node.depth, []);
+        levels.get(node.depth).push(node);
+      });
+      const width = svg.clientWidth || 900;
+      const height = Math.max(640, Math.max(...Array.from(levels.values()).map(v => v.length)) * 78 + 80);
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      levels.forEach((levelNodes, depth) => {
+        const x = 70 + depth * Math.max(150, (width - 160) / 4.6);
+        const gap = height / (levelNodes.length + 1);
+        levelNodes.forEach((node, idx) => {
+          node.x = Math.min(width - 130, x);
+          node.y = gap * (idx + 1);
+        });
+      });
+      return { nodes, links, width, height };
+    }
+
+    function pathBetween(source, target) {
+      const mid = (source.x + target.x) / 2;
+      return `M${source.x},${source.y} C${mid},${source.y} ${mid},${target.y} ${target.x},${target.y}`;
+    }
+
+    function wrapLabel(text, max = 24) {
+      const words = text.split(" ");
+      const lines = [];
+      let line = "";
+      words.forEach(word => {
+        const next = line ? `${line} ${word}` : word;
+        if (next.length > max && line) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = next;
+        }
+      });
+      if (line) lines.push(line);
+      return lines.slice(0, 3);
+    }
+
+    function matchesSearch(node, term) {
+      if (!term) return false;
+      const haystack = [
+        node.name,
+        node.summary || "",
+        ...(node.points || []),
+        ...(node.tags || [])
+      ].join(" ").toLowerCase();
+      return haystack.includes(term);
+    }
+
+    function render() {
+      const term = searchBox.value.trim().toLowerCase();
+      const { nodes, links } = layout(rootData);
+      svg.innerHTML = "";
+
+      links.forEach(([source, target]) => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("class", "link");
+        path.setAttribute("d", pathBetween(source, target));
+        svg.appendChild(path);
+      });
+
+      nodes.forEach(node => {
+        const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        group.setAttribute("class", `node ${node === selectedNode ? "selected" : ""} ${matchesSearch(node, term) ? "match" : ""}`);
+        group.setAttribute("transform", `translate(${node.x},${node.y})`);
+        group.setAttribute("tabindex", "0");
+        group.setAttribute("role", "button");
+        group.setAttribute("aria-label", node.name);
+
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        const radius = node.depth === 0 ? 24 : node.children ? 17 : 12;
+        circle.setAttribute("r", radius);
+        circle.setAttribute("fill", colors[node.color] || colors.teal);
+        group.appendChild(circle);
+
+        if (node.children) {
+          const icon = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          icon.setAttribute("text-anchor", "middle");
+          icon.setAttribute("dy", "4");
+          icon.setAttribute("fill", "#fff");
+          icon.setAttribute("stroke", "none");
+          icon.style.fontSize = "16px";
+          icon.textContent = node.expanded ? "−" : "+";
+          group.appendChild(icon);
+        }
+
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", radius + 8);
+        label.setAttribute("y", -8);
+        wrapLabel(node.name).forEach((line, index) => {
+          const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+          tspan.setAttribute("x", radius + 8);
+          tspan.setAttribute("dy", index === 0 ? "0" : "15");
+          tspan.textContent = line;
+          label.appendChild(tspan);
+        });
+        group.appendChild(label);
+
+        group.addEventListener("click", () => {
+          selectedNode = node;
+          showDetail(node);
+          if (node.children) node.expanded = !node.expanded;
+          render();
+        });
+        group.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            group.dispatchEvent(new Event("click"));
+          }
+        });
+
+        svg.appendChild(group);
+      });
+    }
+
+    function showDetail(node) {
+      detailTitle.textContent = node.name;
+      detailSummary.textContent = node.summary || "";
+      detailPoints.innerHTML = "";
+      tagRow.innerHTML = "";
+      (node.tags || []).forEach(tag => {
+        const span = document.createElement("span");
+        span.className = "tag";
+        span.textContent = tag;
+        tagRow.appendChild(span);
+      });
+      (node.points || []).forEach(point => {
+        const li = document.createElement("li");
+        li.textContent = point;
+        detailPoints.appendChild(li);
+      });
+    }
+
+    function setExpanded(node, expanded, depthLimit = Infinity) {
+      if (node.children) node.expanded = node.depth < depthLimit ? expanded : false;
+      (node.children || []).forEach(child => setExpanded(child, expanded, depthLimit));
+    }
+
+    assignState(rootData);
+    selectedNode = rootData;
+    showDetail(rootData);
+    render();
+
+    document.getElementById("expandBtn").addEventListener("click", () => {
+      setExpanded(rootData, true);
+      render();
+    });
+    document.getElementById("collapseBtn").addEventListener("click", () => {
+      setExpanded(rootData, true, 2);
+      rootData.expanded = true;
+      render();
+    });
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      assignState(rootData);
+      selectedNode = rootData;
+      showDetail(rootData);
+      searchBox.value = "";
+      render();
+    });
+    searchBox.addEventListener("input", render);
+    window.addEventListener("resize", render);
+  </script>
+</body>
+</html>

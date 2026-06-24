@@ -25,6 +25,7 @@ import {
 } from "./data/site";
 import Dp700Page from "./dp700/Dp700Page";
 import FourRulePage from "./FourRulePage";
+import MindmapPage from "./leo/mindmap/MindmapPage";
 import type { ContactLink, Project } from "./types/site";
 
 const navigation = [
@@ -96,6 +97,10 @@ function App() {
 
   if (pathname === "/dp700" || pathname === "/dp700/") {
     return <Dp700Page />;
+  }
+
+  if (pathname === "/leo/mindmap" || pathname === "/leo/mindmap/") {
+    return <MindmapPage />;
   }
 
   return (
