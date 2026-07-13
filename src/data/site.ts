@@ -10,7 +10,7 @@ export const profile: Profile = {
   name: "Michael Fung",
   fullName: "Fung Chak Sum",
   role: "System Engineer and Developer",
-  location: "North York, Toronto",
+  location: "Hong Kong",
   intro:
     "I build dependable systems and practical digital products across cloud infrastructure, internal tools, and interactive experiences.",
   summary:
