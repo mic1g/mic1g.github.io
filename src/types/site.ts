@@ -50,6 +50,8 @@ export type Certification = {
   name: string;
   issuer: string;
   status: "Completed / Current" | "Planned";
+  earnedOn?: string;
+  expiresOn?: string;
   link?: string;
   image: string;
 };
