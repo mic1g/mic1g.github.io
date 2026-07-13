@@ -309,6 +309,15 @@ export const projects: Project[] = [
 
 export const certifications: Certification[] = [
   {
+    name: "Microsoft Certified: Fabric Data Engineer Associate (DP-700)",
+    issuer: "Microsoft",
+    status: "Completed / Current",
+    earnedOn: "July 10, 2026",
+    expiresOn: "July 11, 2027",
+    link: "https://learn.microsoft.com/zh-tw/users/ChakSumFung-5694/credentials/440037B78284D935",
+    image: "/assets/img/certificate-pic/azureLogo.png",
+  },
+  {
     name: "Microsoft Certified: Azure Administrator Associate (AZ-104)",
     issuer: "Microsoft",
     status: "Completed / Current",
