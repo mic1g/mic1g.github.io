@@ -278,6 +278,13 @@ function App() {
                           {certification.status}
                         </span>
                       </div>
+                      {certification.earnedOn || certification.expiresOn ? (
+                        <p className="mt-3 text-xs leading-5 text-slate">
+                          {certification.earnedOn ? `Earned ${certification.earnedOn}` : null}
+                          {certification.earnedOn && certification.expiresOn ? " · " : null}
+                          {certification.expiresOn ? `Expires ${certification.expiresOn}` : null}
+                        </p>
+                      ) : null}
                     </>
                   );
 
