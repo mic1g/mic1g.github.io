@@ -1,5 +1,6 @@
 "use client";
 
+import katex from "katex";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type BlockType =
@@ -190,6 +191,99 @@ function parseTable(value: string) {
     .filter((row) => row.some(Boolean));
 }
 
+function serializeTable(rows: string[][]) {
+  return rows.map((row) => row.join(" | ")).join("\n");
+}
+
+function normalizeTable(value: string) {
+  const rows = value.split("\n").map((row) => row.split("|").map((cell) => cell.trim()));
+  const columnCount = Math.max(1, ...rows.map((row) => row.length));
+  return rows.map((row) => [...row, ...Array(Math.max(0, columnCount - row.length)).fill("")]);
+}
+
+function MathPreview({ value, compact = false }: { value: string; compact?: boolean }) {
+  const rendered = useMemo(() => {
+    try {
+      return {
+        html: katex.renderToString(value || "\\text{Enter an equation}", {
+          displayMode: true,
+          output: "htmlAndMathml",
+          strict: false,
+          throwOnError: true,
+          trust: false,
+        }),
+        error: "",
+      };
+    } catch (error) {
+      return {
+        html: "",
+        error: error instanceof Error ? error.message.replace(/^KaTeX parse error:\s*/i, "") : "Invalid LaTeX equation",
+      };
+    }
+  }, [value]);
+
+  return (
+    <div className={`math-preview ${compact ? "compact" : ""} ${rendered.error ? "has-error" : ""}`} aria-live="polite">
+      {rendered.error ? (
+        <div className="math-error"><strong>Could not typeset this yet</strong><span>{rendered.error}</span></div>
+      ) : (
+        <div className="math-output" dangerouslySetInnerHTML={{ __html: rendered.html }} />
+      )}
+    </div>
+  );
+}
+
+function EditableTablePreview({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const rows = normalizeTable(value);
+
+  const updateCell = (rowIndex: number, columnIndex: number, cellValue: string) => {
+    const nextRows = rows.map((row) => [...row]);
+    nextRows[rowIndex][columnIndex] = cellValue;
+    onChange(serializeTable(nextRows));
+  };
+
+  const addRow = () => onChange(serializeTable([...rows, Array(rows[0]?.length || 1).fill("")]));
+  const addColumn = () => onChange(serializeTable(rows.map((row) => [...row, ""])));
+
+  return (
+    <div className="editable-table-preview">
+      <div className="editable-table-scroll">
+        <table>
+          <tbody>
+            {rows.map((row, rowIndex) => (
+              <tr key={`editable-row-${rowIndex}`}>
+                {row.map((cell, columnIndex) => {
+                  const Cell = rowIndex === 0 ? "th" : "td";
+                  return (
+                    <Cell key={`editable-cell-${rowIndex}-${columnIndex}`}>
+                      <input
+                        aria-label={`Table row ${rowIndex + 1}, column ${columnIndex + 1}`}
+                        value={cell}
+                        placeholder={rowIndex === 0 ? "Heading" : "Value"}
+                        onChange={(event) => updateCell(rowIndex, columnIndex, event.target.value)}
+                      />
+                    </Cell>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="table-preview-actions">
+        <span>Click any cell to edit</span>
+        <div><button type="button" onClick={addRow}>＋ Row</button><button type="button" onClick={addColumn}>＋ Column</button></div>
+      </div>
+    </div>
+  );
+}
+
 function generateLatex(document: DocumentState) {
   const bibliography = document.blocks.filter((block) => block.type === "citation");
   const body = document.blocks
@@ -301,12 +395,14 @@ function downloadFile(filename: string, content: string, type: string) {
 }
 
 function EditableField({
+  id,
   value,
   onChange,
   multiline = true,
   placeholder,
   className = "",
 }: {
+  id?: string;
   value: string;
   onChange: (value: string) => void;
   multiline?: boolean;
@@ -316,6 +412,7 @@ function EditableField({
   if (multiline) {
     return (
       <textarea
+        id={id}
         className={`block-input ${className}`}
         value={value}
         placeholder={placeholder}
@@ -326,6 +423,7 @@ function EditableField({
   }
   return (
     <input
+      id={id}
       className={`block-input ${className}`}
       value={value}
       placeholder={placeholder}
@@ -355,7 +453,7 @@ function PreviewBlock({ block, citationIndex }: { block: Block; citationIndex: n
     case "equation":
       return (
         <figure className="paper-equation">
-          <div>{block.text}</div>
+          <MathPreview value={block.text} compact />
           {block.caption && <figcaption>{block.caption}</figcaption>}
         </figure>
       );
@@ -733,7 +831,13 @@ export default function Home() {
 
                       {block.type === "equation" && (
                         <div className="structured-fields">
-                          <EditableField value={block.text} onChange={(text) => updateBlock(block.id, { text })} className="equation-input" />
+                          <div className="live-block-preview equation-live-preview">
+                            <div className="live-preview-heading"><span>Typeset preview</span><small>Updates as you type</small></div>
+                            <MathPreview value={block.text} />
+                            {block.caption && <p>{block.caption}</p>}
+                          </div>
+                          <label className="source-field-label" htmlFor={`equation-source-${block.id}`}><span>LaTeX source</span><small>Editable</small></label>
+                          <EditableField id={`equation-source-${block.id}`} value={block.text} onChange={(text) => updateBlock(block.id, { text })} className="equation-input" />
                           <div className="two-fields">
                             <input value={block.caption || ""} placeholder="Equation note (optional)" onChange={(event) => updateBlock(block.id, { caption: event.target.value })} />
                             <input value={block.label || ""} placeholder="eq:label" onChange={(event) => updateBlock(block.id, { label: event.target.value })} />
@@ -770,6 +874,12 @@ export default function Home() {
 
                       {block.type === "table" && (
                         <div className="structured-fields">
+                          <div className="live-block-preview table-live-preview">
+                            <div className="live-preview-heading"><span>Final table preview</span><small>Directly editable</small></div>
+                            <EditableTablePreview value={block.text} onChange={(text) => updateBlock(block.id, { text })} />
+                            {block.caption && <p><strong>Table.</strong> {block.caption}</p>}
+                          </div>
+                          <label className="source-field-label"><span>Structured table source</span><small>Rows use new lines · cells use |</small></label>
                           <EditableField value={block.text} onChange={(text) => updateBlock(block.id, { text })} className="table-input" />
                           <small className="field-hint">Separate cells with <code>|</code> and rows with a new line.</small>
                           <div className="two-fields">

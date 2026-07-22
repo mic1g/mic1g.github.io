@@ -757,6 +757,188 @@ select:focus {
   gap: 7px;
 }
 
+.live-block-preview {
+  background: var(--paper);
+  border: 1px solid #d6ddd9;
+  border-radius: 8px;
+  box-shadow: 0 4px 13px rgba(31, 52, 54, 0.05);
+  overflow: hidden;
+}
+
+.live-preview-heading {
+  align-items: center;
+  background: #f3f5f2;
+  border-bottom: 1px solid #e0e4e0;
+  display: flex;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  justify-content: space-between;
+  padding: 7px 10px;
+}
+
+.live-preview-heading span,
+.source-field-label span {
+  color: #4f6268;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.live-preview-heading small,
+.source-field-label small {
+  color: #8b9698;
+  font-size: 8px;
+}
+
+.source-field-label {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 3px -2px;
+}
+
+.equation-live-preview {
+  cursor: text;
+}
+
+.equation-live-preview > p,
+.table-live-preview > p {
+  color: #778387;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 9px;
+  margin: 0;
+  padding: 0 13px 10px;
+  text-align: center;
+}
+
+.math-preview {
+  align-items: center;
+  color: #203b43;
+  display: flex;
+  justify-content: center;
+  min-height: 94px;
+  overflow-x: auto;
+  padding: 14px 18px;
+}
+
+.math-preview .katex-display {
+  margin: 0;
+}
+
+.math-preview .katex {
+  font-size: 1.38em;
+}
+
+.math-preview.compact {
+  min-height: 40px;
+  padding: 4px;
+}
+
+.math-preview.compact .katex {
+  font-size: 1.08em;
+}
+
+.math-preview.has-error {
+  background: #fff8f4;
+  justify-content: flex-start;
+}
+
+.math-error {
+  color: #9c5137;
+  display: flex;
+  flex-direction: column;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  gap: 3px;
+}
+
+.math-error strong {
+  font-size: 10px;
+}
+
+.math-error span {
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.editable-table-scroll {
+  overflow-x: auto;
+  padding: 12px 12px 4px;
+}
+
+.editable-table-preview table {
+  border-collapse: collapse;
+  min-width: 100%;
+  table-layout: fixed;
+}
+
+.editable-table-preview th,
+.editable-table-preview td {
+  border-bottom: 1px solid #dde2de;
+  min-width: 110px;
+  padding: 0;
+}
+
+.editable-table-preview th {
+  border-bottom-color: #879993;
+}
+
+.editable-table-preview input {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-shadow: none;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 10px;
+  min-width: 0;
+  outline: none;
+  padding: 7px 8px;
+  width: 100%;
+}
+
+.editable-table-preview th input {
+  color: #2f474e;
+  font-weight: 750;
+}
+
+.editable-table-preview input:hover {
+  background: #f6f8f5;
+  border-color: #dce2de;
+}
+
+.editable-table-preview input:focus {
+  background: #edf5f2;
+  border-color: #78a79e !important;
+}
+
+.table-preview-actions {
+  align-items: center;
+  color: #8b9698;
+  display: flex;
+  font-size: 8px;
+  justify-content: space-between;
+  padding: 7px 12px 10px;
+}
+
+.table-preview-actions > div {
+  display: flex;
+  gap: 4px;
+}
+
+.table-preview-actions button {
+  background: #eef3f0;
+  border: 1px solid #d7e0dc;
+  border-radius: 4px;
+  color: var(--teal);
+  font-size: 8px;
+  font-weight: 700;
+  padding: 4px 7px;
+}
+
+.table-preview-actions button:hover {
+  background: var(--teal-soft);
+  border-color: #a8c1ba;
+}
+
 .two-fields {
   grid-template-columns: 1.5fr 1fr;
 }
@@ -777,8 +959,9 @@ select:focus {
 
 .equation-input {
   color: var(--teal-dark);
-  font-size: 15px;
-  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  min-height: 50px;
 }
 
 .raw-input {
@@ -1235,8 +1418,7 @@ select:focus {
 
 .paper-equation > div {
   color: #203b43;
-  font-size: 17px;
-  font-style: italic;
+  font-size: 14px;
 }
 
 .paper-content figcaption {
