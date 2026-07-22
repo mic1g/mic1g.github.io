@@ -212,17 +212,6 @@ export const skillGroups = [
   },
 ];
 
-export const projectDownloads = [
-  {
-    title: "FolioTeX",
-    description:
-      "A local-first academic report builder with structured blocks, live document preview, validation, and XeLaTeX source export.",
-    label: "Download FolioTeX source",
-    details: "ZIP archive · 105 KB",
-    href: "/assets/downloads/FolioTeX-source-2026-07-22.zip",
-  },
-];
-
 export const projects: Project[] = [
   {
     slug: "jobswipe",

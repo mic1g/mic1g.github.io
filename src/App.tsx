@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   ArrowRight,
   BriefcaseBusiness,
-  Download,
   ExternalLink,
   Github,
   GraduationCap,
@@ -20,7 +19,6 @@ import {
   education,
   experiences,
   profile,
-  projectDownloads,
   projects,
   skillGroups,
   strengths,
@@ -428,41 +426,6 @@ function App() {
                 These projects show how I approach delivery from idea framing and coordination
                 through to implementation and presentation.
               </p>
-            </div>
-
-            <div className="mt-8 grid gap-4">
-              {projectDownloads.map((download) => (
-                <article
-                  key={download.href}
-                  className="flex flex-col gap-5 rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-panel backdrop-blur sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div className="max-w-2xl">
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">
-                      Source download
-                    </p>
-                    <h3 className="mt-2 font-display text-2xl font-semibold text-white">
-                      {download.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-7 text-white/75">
-                      {download.description}
-                    </p>
-                  </div>
-                  <a
-                    href={download.href}
-                    download
-                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                    aria-label={`${download.label} (${download.details})`}
-                  >
-                    <Download size={17} aria-hidden="true" />
-                    <span>
-                      {download.label}
-                      <span className="block text-xs font-medium text-slate">
-                        {download.details}
-                      </span>
-                    </span>
-                  </a>
-                </article>
-              ))}
             </div>
 
             <div className="mt-12 grid gap-6 lg:grid-cols-2">
