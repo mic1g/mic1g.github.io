@@ -29,6 +29,19 @@ export type ExperienceItem = {
   bullets: string[];
 };
 
+export type PrivateAppState =
+  | {
+      status: "in_progress";
+      notice: string;
+      signInLabel: string;
+    }
+  | {
+      status: "live";
+      href: string;
+      label: string;
+      signInLabel: string;
+    };
+
 export type Project = {
   slug: string;
   title: string;
@@ -38,7 +51,10 @@ export type Project = {
   summary: string;
   challenge: string;
   impact: string;
+  highlights?: string[];
+  privateApp?: PrivateAppState;
   image: string;
+  imageFit?: "cover" | "contain";
   gallery: string[];
   links: Array<{
     label: string;

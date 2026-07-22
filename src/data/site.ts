@@ -212,7 +212,58 @@ export const skillGroups = [
   },
 ];
 
+export const projectDownloads = [
+  {
+    title: "FolioTeX",
+    description:
+      "A local-first academic report builder with structured blocks, live document preview, validation, and XeLaTeX source export.",
+    label: "Download FolioTeX source",
+    details: "ZIP archive · 105 KB",
+    href: "/assets/downloads/FolioTeX-source-2026-07-22.zip",
+  },
+];
+
 export const projects: Project[] = [
+  {
+    slug: "jobswipe",
+    title: "JobSwipe — Private AI Job-Application Assistant",
+    category: "Private AI productivity application",
+    role: "Creator and full-stack developer",
+    stack: [
+      "Python",
+      "FastAPI",
+      "SQLAlchemy",
+      "SQLite",
+      "OpenAI API",
+      "Gmail OAuth",
+      "Docker",
+      "Caddy",
+      "Chrome Extension",
+    ],
+    summary:
+      "A review-first job discovery and application workspace that ranks permitted job listings against verified career facts, then prepares truthful, ATS-friendly resumes and cover letters for final human approval.",
+    challenge:
+      "Build an end-to-end application assistant without exposing private career data, fabricating applicant claims, or removing human control from final submissions.",
+    impact:
+      "Delivered a single-user, password-protected workspace with transparent scoring, verified-facts-only drafting, encrypted persistence, and manual approval gates.",
+    highlights: [
+      "Tinder-style one-job-at-a-time review experience",
+      "Gmail job-alert ingestion plus public Greenhouse and Lever sources",
+      "Transparent matching scores, evidence, gaps, and eligibility warnings",
+      "Verified-facts-only resume and cover-letter drafting",
+      "Versioned DOCX/PDF exports and review-gated application assistance",
+      "Encrypted personal data and password-protected single-user deployment",
+    ],
+    privateApp: {
+      status: "in_progress",
+      notice: "Private deployment in progress",
+      signInLabel: "Private sign-in required",
+    },
+    image: "/assets/img/portfolio/jobswipe/review-demo.jpg",
+    imageFit: "contain",
+    gallery: [],
+    links: [],
+  },
   {
     slug: "spf-runner",
     title: "SPF Runner",

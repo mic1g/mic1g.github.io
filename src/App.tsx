@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import {
   ArrowRight,
   BriefcaseBusiness,
+  Download,
   ExternalLink,
   Github,
   GraduationCap,
   Instagram,
   Linkedin,
+  LockKeyhole,
   Mail,
   MapPin,
   Menu,
@@ -18,6 +20,7 @@ import {
   education,
   experiences,
   profile,
+  projectDownloads,
   projects,
   skillGroups,
   strengths,
@@ -427,6 +430,41 @@ function App() {
               </p>
             </div>
 
+            <div className="mt-8 grid gap-4">
+              {projectDownloads.map((download) => (
+                <article
+                  key={download.href}
+                  className="flex flex-col gap-5 rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-panel backdrop-blur sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="max-w-2xl">
+                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">
+                      Source download
+                    </p>
+                    <h3 className="mt-2 font-display text-2xl font-semibold text-white">
+                      {download.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-7 text-white/75">
+                      {download.description}
+                    </p>
+                  </div>
+                  <a
+                    href={download.href}
+                    download
+                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+                    aria-label={`${download.label} (${download.details})`}
+                  >
+                    <Download size={17} aria-hidden="true" />
+                    <span>
+                      {download.label}
+                      <span className="block text-xs font-medium text-slate">
+                        {download.details}
+                      </span>
+                    </span>
+                  </a>
+                </article>
+              ))}
+            </div>
+
             <div className="mt-12 grid gap-6 lg:grid-cols-2">
               {projects.map((project) => (
                 <article
@@ -437,7 +475,9 @@ function App() {
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="h-64 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                      className={`h-64 w-full transition duration-500 group-hover:scale-[1.03] ${
+                        project.imageFit === "contain" ? "bg-white object-contain" : "object-cover"
+                      }`}
                     />
                   </div>
                   <div className="p-7">
@@ -447,6 +487,20 @@ function App() {
                     <h3 className="mt-3 font-display text-2xl font-semibold">{project.title}</h3>
                     <p className="mt-2 text-sm font-medium text-white/70">{project.role}</p>
                     <p className="mt-4 text-sm leading-7 text-white/75">{project.summary}</p>
+                    {project.privateApp ? (
+                      <div className="mt-5 flex flex-wrap gap-2">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-semibold text-white/90">
+                          <LockKeyhole size={14} />
+                          {project.privateApp.signInLabel}
+                        </span>
+                        {project.privateApp.status === "in_progress" ? (
+                          <span className="inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/10 px-3 py-2 text-xs font-semibold text-gold">
+                            <span className="h-2 w-2 rounded-full bg-gold" />
+                            {project.privateApp.notice}
+                          </span>
+                        ) : null}
+                      </div>
+                    ) : null}
                     <div className="mt-5 flex flex-wrap gap-2">
                       {project.stack.map((item) => (
                         <span key={item} className="rounded-full bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85">
@@ -570,7 +624,9 @@ function App() {
                 <img
                   src={activeProject.image}
                   alt={activeProject.title}
-                  className="h-72 w-full rounded-[1.5rem] object-cover"
+                  className={`h-72 w-full rounded-[1.5rem] ${
+                    activeProject.imageFit === "contain" ? "bg-mist object-contain" : "object-cover"
+                  }`}
                 />
                 <div className="mt-4 grid gap-3 sm:grid-cols-3">
                   {activeProject.gallery.map((image) => (
@@ -603,6 +659,21 @@ function App() {
                   </p>
                   <p className="mt-3 text-sm leading-7 text-slate">{activeProject.impact}</p>
                 </div>
+                {activeProject.highlights?.length ? (
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate/70">
+                      Highlights
+                    </p>
+                    <ul className="mt-3 space-y-2">
+                      {activeProject.highlights.map((highlight) => (
+                        <li key={highlight} className="flex gap-3 text-sm leading-6 text-slate">
+                          <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-coral" />
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate/70">
                     Stack
@@ -618,6 +689,29 @@ function App() {
                     ))}
                   </div>
                 </div>
+                {activeProject.privateApp ? (
+                  <div className="rounded-2xl border border-brand/15 bg-brand/5 p-4">
+                    <div className="flex items-center gap-2 text-sm font-semibold text-ink">
+                      <LockKeyhole size={16} className="text-brand" />
+                      {activeProject.privateApp.signInLabel}
+                    </div>
+                    {activeProject.privateApp.status === "live" ? (
+                      <a
+                        href={activeProject.privateApp.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand"
+                      >
+                        {activeProject.privateApp.label}
+                        <ExternalLink size={16} />
+                      </a>
+                    ) : (
+                      <p className="mt-2 text-sm font-medium text-brand">
+                        {activeProject.privateApp.notice}
+                      </p>
+                    )}
+                  </div>
+                ) : null}
                 {activeProject.links.length ? (
                   <div className="flex flex-wrap gap-3">
                     {activeProject.links.map((link) => (
